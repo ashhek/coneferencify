@@ -1,12 +1,13 @@
-import React, {ReactNode } from "react";
 
-const RootLayout = ({ children }: { children: ReactNode }) => {
-    console.log('RootLayout rendered');
+import { ReactNode } from 'react';
+
+
+const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
-    <main>  
-      {children}
+    <main>
+     {children}
     </main>
-  )
+  );
 };
 
 export default RootLayout;
