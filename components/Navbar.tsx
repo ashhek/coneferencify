@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
+import MobileNav from './MobileNav'
 
 function Navbar() {
   return (
@@ -15,6 +16,13 @@ function Navbar() {
        />
        <p className='text-[26px] font-extrabold text-white max-sm:hidden'>Confrencify</p>
       </Link>
+
+      <div className='flex-betweeen gap-5'>
+        /*{/* clerk user management */}*/
+
+
+        <MobileNav />
+      </div>
     </nav>
   )
 }
