@@ -1,7 +1,6 @@
 'use client';
 
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
-
 import Loader from './Loader';
 import { useGetCalls } from '@/hooks/useGetCalls';
 import MeetingCard from './MeetingCard';
@@ -10,8 +9,7 @@ import { useRouter } from 'next/navigation';
 
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const router = useRouter();
-  const { endedCalls, upcomingCalls, callRecordings, isLoading } =
-    useGetCalls();
+  const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
 
   const getCalls = () => {
@@ -43,7 +41,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   useEffect(() => {
     const fetchRecordings = async () => {
       const callData = await Promise.all(
-        callRecordings?.map((meeting) => meeting.queryRecordings()) ?? [],
+        callRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
       );
 
       const recordings = callData
@@ -56,7 +54,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
     if (type === 'recordings') {
       fetchRecordings();
     }
-  }, [type, callRecordings]);
+  }, [type, callRecordings]); // Ensure all required dependencies are included
 
   if (isLoading) return <Loader />;
 
@@ -73,8 +71,8 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
               type === 'ended'
                 ? '/icons/previous.svg'
                 : type === 'upcoming'
-                  ? '/icons/upcoming.svg'
-                  : '/icons/recordings.svg'
+                ? '/icons/upcoming.svg'
+                : '/icons/recordings.svg'
             }
             title={
               (meeting as Call).state?.custom?.description ||
