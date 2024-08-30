@@ -13,6 +13,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
   const { toast } = useToast();
+
   const getCalls = () => {
     switch (type) {
       case 'ended':
@@ -41,24 +42,25 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
 
   useEffect(() => {
     const fetchRecordings = async () => {
-    try {
+      try {
         const callData = await Promise.all(
           callRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
         );
-  
+
         const recordings = callData
           .filter((call) => call.recordings.length > 0)
           .flatMap((call) => call.recordings);
-  
+
         setRecordings(recordings);
-    } catch(error) {
-      toast({title : 'Try again later'});
-    }
-  }
+      } catch (error) {
+        toast({ title: 'Try again later' });
+      }
+    };
+
     if (type === 'recordings') {
       fetchRecordings();
     }
-  }, [type, callRecordings]); // Ensure all required dependencies are included
+  }, [type, callRecordings, toast]); // Added toast to the dependency array
 
   if (isLoading) return <Loader />;
 
