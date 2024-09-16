@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import HomeCard from './HomeCard';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ function MeetingTypeList() {
     link: ''
   });
   const [callDetails, setCallDetails] = useState<Call>();
-  const { toast } = useToast(); 
+  const { toast } = useToast();
   
   const createMeeting = async () => {
     if (!client || !user) return;
