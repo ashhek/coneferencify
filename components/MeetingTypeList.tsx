@@ -1,37 +1,37 @@
 'use client'
-import React, { useState } from 'react'
-import HomeCard from './HomeCard'
-import { useRouter } from 'next/navigation'
-import MeetingModal from './MeetingModal'
-import { useUser } from '@clerk/nextjs'
+import React, { useState } from 'react';
+import HomeCard from './HomeCard';
+import { useRouter } from 'next/navigation';
+import MeetingModal from './MeetingModal';
+import { useUser } from '@clerk/nextjs';
 import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk';
-import { useToast } from "@/components/ui/use-toast"
-import { Textarea } from './ui/textarea'
-import ReactDatePicker from 'react-datepicker'
-import { Input } from './ui/input'
+import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from './ui/textarea';
+import ReactDatePicker from 'react-datepicker';
+import { Input } from './ui/input';
 
 function MeetingTypeList() {
-  const router = useRouter()
-  const [meetingState, setMeetingState] = useState<'isScheduleMeeting' | 'isJoiningMeeting' | 'isInstantMeeting' | undefined>()
+  const router = useRouter();
+  const [meetingState, setMeetingState] = useState<'isScheduleMeeting' | 'isJoiningMeeting' | 'isInstantMeeting' | undefined>();
   const { user } = useUser();
   const client = useStreamVideoClient();
   const [values, setValues] = useState({
     dateTime: new Date(),
     description: '',
     link: ''
-  })
-  const [callDetails, setCallDetails] = useState<Call>()
-  const { toast } = useToast()  // Ensure correct usage
+  });
+  const [callDetails, setCallDetails] = useState<Call>();
+  const { toast } = useToast(); 
   
   const createMeeting = async () => {
     if (!client || !user) return;
 
     try {
       if (!values.dateTime) {
-        toast({ title: 'Please select date and time' }); // Ensure toast is called correctly
+        toast({ title: 'Please select date and time' });
         return;
       }
-      const id = crypto.randomUUID(); // Ensure browser compatibility for this method.
+      const id = crypto.randomUUID(); // Generate unique call ID
       const call = client.call('default', id);
 
       if (!call) throw new Error('Call not created');
@@ -42,9 +42,7 @@ function MeetingTypeList() {
       await call.getOrCreate({
         data: {
           starts_at: startsAt,
-          custom: {
-            description,
-          },
+          custom: { description },
         },
       });
       
@@ -61,7 +59,7 @@ function MeetingTypeList() {
     }
   };
 
-  const meetingLink = '${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetails?.id}'; // Ensure correct usage
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL?.startsWith('http') ? process.env.NEXT_PUBLIC_BASE_URL : `https://${process.env.NEXT_PUBLIC_BASE_URL}`}/meeting/${callDetails?.id || ''}`; // Corrected link generation
 
   return (
     <section className="grid grid-cols-1 gap-5 md:grid-cols-1 xl:grid-cols-4">
@@ -69,7 +67,7 @@ function MeetingTypeList() {
         img="/icons/add-meeting.svg"
         title="New Meeting"
         description="Start an instant meeting"
-        handleClick={() => setMeetingState('isInstantMeeting')} // Ensure correct state
+        handleClick={() => setMeetingState('isInstantMeeting')}
         className="bg-orange-1"
       />
       <HomeCard
@@ -83,7 +81,7 @@ function MeetingTypeList() {
         img="/icons/recordings.svg"
         title="View Recordings"
         description="Check out your recordings"
-        handleClick={() => router.push('/recordings')} // Uncommented for navigation
+        handleClick={() => router.push('/recordings')}
         className="bg-purple-1"
       />
       <HomeCard
